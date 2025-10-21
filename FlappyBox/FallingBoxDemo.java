@@ -1,0 +1,90 @@
+package hw1;
+
+import java.awt.Font;
+
+/**
+ * A demo where a FallingBox falls from the top of the screen.
+ */
+public class FallingBoxDemo {
+  private FallingBox fallingBox;
+
+  /**
+   * Private constructor to initialize the demo.
+   */
+  private FallingBoxDemo() {
+    setUpCanvas();
+    setUpGameObjects();
+    runGameLoop();
+  }
+
+  /**
+   * Main method.
+   *
+   * @param args command line arguments.
+   */
+  public static void main(String[] args) {
+    new FallingBoxDemo();  // Instantiate the demo and run the game loop
+  }
+
+  /**
+   * Set up the canvas with the desired settings.
+   */
+  private void setUpCanvas() {
+    StdDraw.setCanvasSize(GameConstant.CANVAS_WIDTH, GameConstant.CANVAS_HEIGHT);
+    StdDraw.setXscale(0, GameConstant.CANVAS_WIDTH);
+    StdDraw.setYscale(0, GameConstant.CANVAS_HEIGHT);
+    StdDraw.enableDoubleBuffering();
+  }
+
+  /**
+   * Set up the game objects.
+   */
+  private void setUpGameObjects() {
+    fallingBox = new FallingBox(
+        200,
+        GameConstant.CANVAS_HEIGHT - 50,
+        GameConstant.FLAPPY_BOX_COLOR
+    );
+  }
+
+  /**
+   * Run the main game loop.
+   */
+  private void runGameLoop() {
+    // TODO: Update the runGameLoop method to end the game when the FallingBox reaches/falls off the screen.
+    boolean isGameOver = false;
+    while (!isGameOver) {
+      StdDraw.clear(GameConstant.CANVAS_COLOR);
+      moveGameObjects();
+
+      if (fallingBox.getY() <= GameConstant.BOX_LENGTH) {
+        fallingBox.setY(GameConstant.BOX_LENGTH);
+        isGameOver = true;
+      }
+
+      drawGameObjects();
+      StdDraw.show();
+      StdDraw.pause(GameConstant.FRAME_DELAY);
+    }
+    StdDraw.setFont(new Font("SansSerif", Font.PLAIN, 32));
+    StdDraw.setPenColor(GameConstant.TEXT_COLOR);
+    StdDraw.text(GameConstant.CANVAS_WIDTH / 2.0, GameConstant.CANVAS_HEIGHT / 2.0, "Game Over!");
+    StdDraw.show();
+    StdDraw.pause(3000); //added a short pause before closing so that the message can be seen
+    StdDraw.close();
+  }
+
+  /**
+   * Move the game objects.
+   */
+  private void moveGameObjects() {
+    fallingBox.move();
+  }
+
+  /**
+   * Draw the game objects.
+   */
+  private void drawGameObjects() {
+    fallingBox.draw();
+  }
+}
